@@ -1,86 +1,72 @@
 # Predictive Customer Churn Analysis for Telecom Companies
 
-This project aims to predict customer churn for telecom companies using historical customer data. It includes a machine learning pipeline for preprocessing, feature engineering, model training, and deployment as a REST API. Additionally, a Streamlit dashboard is provided for business stakeholders to interact with the model and gain insights.
+An end-to-end machine learning project that predicts which telecom customers are likely to churn. It covers preprocessing, feature engineering, model training, a Flask REST API for real-time predictions, and a Streamlit dashboard for business users.
 
----
+## Features
 
-## **Features**
-- **Data Preprocessing**: Handles missing values, encodes categorical variables, and scales numerical features.
-- **Feature Engineering**: Creates new features like tenure and one-hot encodes categorical variables.
-- **Model Training**: Uses a Random Forest classifier to predict churn.
-- **REST API**: Deploys the trained model as a Flask API for real-time predictions.
-- **Streamlit Dashboard**: Provides an interactive dashboard for business stakeholders to input customer data and view churn predictions.
+- **Data preprocessing:** handles missing values, encodes categorical variables and scales numerical features.
+- **Feature engineering:** creates features such as tenure and one-hot encodes categorical variables.
+- **Model training:** a Random Forest classifier predicts churn.
+- **REST API:** the trained model is served as a Flask API (`app.py`).
+- **Streamlit dashboard:** enter customer details and see the predicted churn and its probability (`dashboard.py`).
 
----
+## Technologies
 
-## **Technologies Used**
-- **Programming Language**: Python
-- **Libraries**: Pandas, NumPy, Scikit-learn, XGBoost, Flask, Streamlit, Joblib
-- **Deployment**: Flask (API), Streamlit (Dashboard)
+- Python
+- Pandas, NumPy, scikit-learn, XGBoost, Joblib
+- Flask (API) and Streamlit (dashboard)
 
----
+## Project structure
 
-## **Folder Structure**
-telecom-churn-project/
-├── data/
-│ └── telecom_churn.csv # Dataset for training
-├── model/
-│ ├── churn_model.pkl # Trained model
-│ ├── scaler.pkl # Feature scaler
-│ └── column_names.pkl # Column names for one-hot encoding
-├── app.py # Flask API
-├── dashboard.py # Streamlit dashboard
-└── train_model.py # Script for preprocessing and training
+```
+Churn_Data_Prediction/
+├── app.py            # Flask API
+├── dashboard.py      # Streamlit dashboard
+└── train_model.py    # Preprocessing and model training
+```
 
-Copy
+`train_model.py` expects the dataset at `data/telecom_churn.csv` and saves the trained model, scaler and column names to a `model/` folder. The dataset is not included in this repository, so add your own copy before training.
 
----
+## Setup
 
-## **Setup Instructions**
+1. Install Python 3.8 or higher and the dependencies:
 
-### **1. Prerequisites**
-- Python 3.8 or higher
-- Install required libraries:
-  ```bash
-  pip install pandas numpy scikit-learn xgboost flask streamlit joblib
-2. Clone the Repository
-bash
-Copy
-git clone https://github.com/your-username/telecom-churn-project.git
-cd telecom-churn-project
-3. Train the Model
-Place your dataset (telecom_churn.csv) in the data/ folder.
+   ```bash
+   pip install pandas numpy scikit-learn xgboost flask streamlit joblib
+   ```
 
-Run the training script:
+2. Clone the repository:
 
-bash
-Copy
-python train_model.py
-This will:
+   ```bash
+   git clone https://github.com/SaiLohithKumar/Churn_Data_Prediction.git
+   cd Churn_Data_Prediction
+   ```
 
-Preprocess the data.
+3. Place `telecom_churn.csv` in a `data/` folder, then train the model:
 
-Train a Random Forest model.
+   ```bash
+   python train_model.py
+   ```
 
-Save the model, scaler, and column names in the model/ folder.
+4. Start the Flask API (runs at http://127.0.0.1:5000):
 
-4. Run the Flask API
-Start the Flask API:
+   ```bash
+   python app.py
+   ```
 
-bash
-Copy
-python app.py
-The API will be available at http://127.0.0.1:5000.
+5. Start the dashboard:
 
-API Endpoint
-POST /predict:
+   ```bash
+   streamlit run dashboard.py
+   ```
 
-Input: JSON with customer details.
+## API
 
-Example:
+`POST /predict` takes JSON with the customer details and returns the prediction and churn probability.
 
-json
-Copy
+Example request:
+
+```json
 {
   "age": 35,
   "num_dependents": 2,
@@ -94,80 +80,28 @@ Copy
   "state": "Maharashtra",
   "city": "Mumbai"
 }
-Output:
+```
 
-json
-Copy
-{
-  "prediction": 0,
-  "probability": 0.12
-}
-5. Run the Streamlit Dashboard
-Start the Streamlit dashboard:
+Example response:
 
-bash
-Copy
-streamlit run dashboard.py
-Open the URL provided in the terminal to interact with the dashboard.
+```json
+{ "prediction": 0, "probability": 0.12 }
+```
 
-Usage
-1. Flask API
-Use tools like Postman or curl to send POST requests to the API.
+Using curl:
 
-Example:
+```bash
+curl -X POST -H "Content-Type: application/json" \
+  -d '{"age": 35, "num_dependents": 2, "estimated_salary": 50000, "calls_made": 100, "sms_sent": 50, "data_used": 10.5, "tenure": 12, "telecom_partner": "Jio", "gender": "Male", "state": "Maharashtra", "city": "Mumbai"}' \
+  http://127.0.0.1:5000/predict
+```
 
-bash
-Copy
-curl -X POST -H "Content-Type: application/json" -d '{
-  "age": 35,
-  "num_dependents": 2,
-  "estimated_salary": 50000,
-  "calls_made": 100,
-  "sms_sent": 50,
-  "data_used": 10.5,
-  "tenure": 12,
-  "telecom_partner": "Jio",
-  "gender": "Male",
-  "state": "Maharashtra",
-  "city": "Mumbai"
-}' http://127.0.0.1:5000/predict
-2. Streamlit Dashboard
-Input customer details in the sidebar.
+## Future improvements
 
-Click Predict Churn to see the prediction and churn probability.
+- Compare more models (XGBoost, neural networks).
+- Deploy the API and dashboard to the cloud.
+- Add real-time data streaming for up-to-date predictions.
 
-Future Enhancements
-Add more machine learning models (e.g., XGBoost, Neural Networks).
+## Author
 
-Deploy the API and dashboard on the cloud (e.g., AWS, Heroku).
-
-Add real-time data streaming for up-to-date predictions.
-
-Contributing
-Contributions are welcome! Please open an issue or submit a pull request for any improvements.
-
-License
-This project is licensed under the MIT License. See the LICENSE file for details.
-
-Contact
-For questions or feedback, please contact:
-
-Your Name
-
-Email: your.email@example.com
-
-GitHub: your-username
-
-Copy
-
----
-
-### **How to Use the README.md File**
-
-1. Save the content above in a file named `README.md` in the root of your project folder.
-2. Update the placeholders (e.g., `your-username`, `your.email@example.com`) with your actual details.
-3. Push the `README.md` file to your GitHub repository (if applicable).
-
----
-
-This README file provides a comprehensive guide for anyone looking to understand, set up, and use your project. Let me know if you need further assistance! 🚀
+Sai Lohith Kumar Paidi - [GitHub](https://github.com/SaiLohithKumar) · [LinkedIn](https://www.linkedin.com/in/paidi-sai-lohith-kumar-762407240/)
